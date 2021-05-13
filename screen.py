@@ -11,7 +11,7 @@ class Color:
     BLACK = (0, 0, 0)
 
 class Screen:
-    def __init__(self, width=1000, height=1200, font_type="cambria",
+    def __init__(self, width=1000, height=1000, font_type="cambria",
                  font_size=35, background="space.jpg", steering_img_ratio=1,
                  wheel_img_original='wheel_2.png', arrow_img='arrow_direction.png'):
         self.width = width

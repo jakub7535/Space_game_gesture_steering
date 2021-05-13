@@ -27,8 +27,8 @@ class Player(Space_Objects):
 
 # laser destroys any object
 class Laser(Space_Objects):
-    def __init__(self, player_x=0, player_y=0, player_size=0, size=40,
-                 img="laser.png", sound="laser_2.wav"):
+    def __init__(self, player_x=0, player_y=0, player_size=0, size=60,
+                 img="laser_2.png", sound="laser_2.wav"):
         self.x = player_x + int(0.5*(player_size - size))
         self.y = player_y - int(size)
         self.size = size

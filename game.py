@@ -5,17 +5,23 @@ from space_objects import Resources_Obstacles, Laser
 
 class Game:
     resources_obstacles =[ 
-            {"img":"comet.png", "sound":"explosion.wav", "size":100, "life":-20, "score":0,
-             'probability': 0.5},
-            {"img":"empire_ship.png", "sound":"explosion.wav", "size":120, "life":-15, "score":0,
-             'probability': 0.3},
-            {"img":"diamond.png", "sound":"point.wav", "size":80, "life":0, "score":20,
-             'probability': 0.4},
-            {"img": "tools.png", "sound": "tools.wav", "size": 60, "life": 10, "score": 0,
-             'probability': 0.2}
+            {"img":"comet.png", "sound":"explosion.wav", "size":120, "life":-20,
+             "score":0, 'probability': 0.5},
+            {"img":"empire_ship.png", "sound":"explosion.wav", "size":100, "life":-15,
+             "score":0, 'probability': 0.3},
+            {"img": "ufo.png", "sound": "explosion.wav", "size": 100,
+             "life": -25,  "score": 0, 'probability': 0.2},
+            {"img":"diamond.png", "sound":"point.wav", "size":80, "life":0,
+             "score":20, 'probability': 0.4},
+            {"img": "red_diamond.png", "sound": "point.wav", "size": 60, "life": 0,
+             "score": 30, 'probability': 0.2},
+            {"img": "gold_diamond.png", "sound": "point.wav", "size": 60, "life": 0,
+             "score": 50, 'probability': 0.05},
+            {"img": "tools.png", "sound": "tools.wav", "size": 60, "life": 10,
+             "score": 0, 'probability': 0.2}
         ]
     
-    def __init__(self, sound=False, n_levels=5, initial_speed=5, speed_jump=2,
+    def __init__(self, sound=False, n_levels=5, initial_speed=10, speed_jump=2,
                  max_speed=100, pnt_next_lvl=50):
         self.sound = sound
         self.n_levels =n_levels
@@ -152,9 +158,10 @@ class Game:
                     return 'over'
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        with open("assets/" + 'records.txt', 'w') as file:
-                            for i in range(len(self.record_scores)):
-                                file.write(f"{self.record_names[i]} {self.record_scores[i]}\n")
+                        if len(self.name_player) > 0:
+                            with open("assets/" + 'records.txt', 'w') as file:
+                                for i in range(len(self.record_scores)):
+                                    file.write(f"{self.record_names[i]} {self.record_scores[i]}\n")
                     elif event.key == pygame.K_BACKSPACE:
                         self.name_player = self.name_player[:-1]
                     elif event.key == pygame.K_ESCAPE:
@@ -166,6 +173,6 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return 'over'
-                if event.type == pygame.KEYDOWN:
+                elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         return 'new game'

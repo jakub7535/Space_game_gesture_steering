@@ -34,8 +34,8 @@ class HandDetector:
     def get_hands_params(self, img):
         self.img = img
         self.imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        self.left_hand = None
-        self.right_hand = None
+        # self.left_hand = None
+        # self.right_hand = None
 
         self.results = self.hands_detection.process(self.imgRGB)
         if not self.results.multi_hand_landmarks:
@@ -115,9 +115,9 @@ class Steering:
     def calculate_wheel(self, img, left_hand, right_hand):
         self.img = img
         if left_hand is None or right_hand is None:
-            self.wheel_radius = None
-            self.wheel_center = None
-            self.wheel_angle = None
+            # self.wheel_radius = None
+            # self.wheel_center = None
+            # self.wheel_angle = None
             return
 
         wheel_radius_test = max(int(0.5 * distance_points(left_hand.hand_center,
@@ -125,9 +125,9 @@ class Steering:
         if wheel_radius_test > 0.1*self.screen_width:
             wheel_radius = wheel_radius_test
         else:
-            self.wheel_radius = None
-            self.wheel_center = None
-            self.wheel_angle = None
+            # self.wheel_radius = None
+            # self.wheel_center = None
+            # self.wheel_angle = None
             return
 
         wheel_center = center_points(left_hand.hand_center, right_hand.hand_center)

@@ -2,6 +2,7 @@ import sys
 import time
 import pygame
 import cv2
+import argparse
 from steering import HandDetector, Steering
 from time import sleep
 from space_objects import Player
@@ -9,14 +10,15 @@ from screen import Screen
 from game import Game
 from level_images_load import read_level_images
 
+
 def play_game():
     vid = cv2.VideoCapture(0)
     vid_h = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
     vid_w = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
     steering_img_ratio = vid_w / vid_h
 
-    game_screen_height = 1300
-    game_screen_width = 1200
+    game_screen_height = args.height
+    game_screen_width = args.width
     steering_screen_height = int(game_screen_height * 0.5)
     steering_screen_width = int(steering_screen_height * steering_img_ratio)
     detector = HandDetector(steering_screen_height, steering_screen_width, draw_hands=False)
@@ -95,4 +97,10 @@ def play_game():
                 play_game()
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--height', type=int, default='1000',
+                        help='height of game window')
+    parser.add_argument('--width', type=int, default='1000',
+                        help='width of game window')
+    args = parser.parse_args()
     play_game()
