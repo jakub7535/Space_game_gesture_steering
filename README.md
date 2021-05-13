@@ -1,18 +1,19 @@
 # Star Wars
 
-Star Wars is game implemented in **PYTHON** using **Pygame** library that uses **Artificial Inteligence** to recognize and map the positions of points on your hands.
-Our goal is to collect as many points as we can, you collect them by catching gems. You also have to look for asteroids and enemy spaceships, you can simply run from them or shoot them with laser. If they hit you you will lose life points, you can restore them by catching tools. With more points, objects are apearing with higher velocity. 
-To steer the spaceship you need to pretend that you are holding a wheel, like you do while driving a car. 
-The stronger you turn the faster the spaceship will turn. You shoot laser by giving the thumbs up with both of your hands, while the rest of the fingers are folded.
+Star Wars is a game implemented in **PYTHON** library **Pygame**. To steer the spaceship we use **Mediapipe**, which is a library that uses **Artificial Intelligence** to recognize and map the positions of the points on your hands.
+Our goal is to collect as many points as we can, you collect them by catching gems. You also have to look for asteroids and enemy spaceships, you can simply run from them or shoot them with a laser. If they hit you you will lose life points, you can restore them by catching tools. With more points, objects are appearing with higher velocity. 
+To steer the spaceship you need to pretend that you are holding a wheel, like you would do while driving a car. 
+The stronger you turn, the faster the spaceship will turn. You shoot laser by giving the thumbs up with both of your hands, while the rest of the fingers are folded.
 ## Tips for better steering:
-1. Make sure your palms are visable for camera.
-2. Make sure you have a good lighting and camera sees you clearly.
+1. Make sure your palms are visible for the camera.
+2. Make sure you have a good lighting and the camera sees you clearly.
 3. Try to avoid rapid movements of hands, so they wouldn't look blurry for the camera.
 4. Try to remember to keep your hands in fist positions (fingers folded).
-If you'll be good enough pilot you can cover yourself with glory and earn places in ranks of 5 the best pilots in the galaxy!!!
+
+If you'll be a good enough pilot you can cover yourself with glory and earn places in the ranks of 5 the best pilots in the galaxy!!!
  
  ## Demo of a game
- <p align="center"><img src="assets/assets_readme/demo2.gif"\></p>
+![sg](https://user-images.githubusercontent.com/73268650/118136149-13ccf480-b404-11eb-81db-224dae58101e.gif)
 
 
 # Instalation
@@ -40,4 +41,8 @@ Installing using pip
 
 ``` bash
 pip install opencv-python==4.5.1.48 numpy==1.19.2 pygame==2.0.1 mediapipe==0.8.3.1
+```
+To play type into command window(make sure you are in the right repository):
+``` bash
+python main.py
 ```
