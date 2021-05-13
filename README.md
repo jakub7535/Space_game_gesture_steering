@@ -1,7 +1,7 @@
 # Star Wars
 
 Star Wars is game implemented in **PYTHON** using **Pygame** library that uses **Artificial Inteligence** to recognize and map the positions of points on your hands.
-Our goal is to collect as many points as we can, you collect them by catching gems. You also have to look for asteroids, you can simply run from them or shoot them with laser. With more points, objects are apearing with higher velocity. 
+Our goal is to collect as many points as we can, you collect them by catching gems. You also have to look for asteroids and enemy spaceships, you can simply run from them or shoot them with laser. If they hit you you will lose life points, you can restore them by catching tools. With more points, objects are apearing with higher velocity. 
 To steer the spaceship you need to pretend that you are holding a wheel, like you do while driving a car. 
 The stronger you turn the faster the spaceship will turn. You shoot laser by giving the thumbs up with both of your hands, while the rest of the fingers are folded.
 ## Tips for better steering:
@@ -14,11 +14,6 @@ If you'll be good enough pilot you can cover yourself with glory and earn places
  ## Demo of a game
  <p align="center"><img src="assets/assets_readme/demo2.gif"\></p>
 
-## How to run 
-To run this program:
-1. Clone repository from github and enter the project.
-2. Install required liberaries via Pip or Anaconda(rocomended).
-3. Run main.py and enjoy game.
 
 # Instalation
 First clone this repository using git 
