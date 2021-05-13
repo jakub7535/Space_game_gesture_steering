@@ -31,7 +31,7 @@ class Laser(Space_Objects):
                  img="laser_2.png", sound="laser_2.wav"):
         self.x = player_x + int(0.5*(player_size - size))
         self.y = player_y - int(size)
-        self.size = size
+        self.size = int(size * player_size/120)
         self.img = pygame.image.load("assets/" + img)
         self.img = pygame.transform.scale(self.img, (self.size, self.size))
         if sound is not None:
@@ -42,7 +42,7 @@ class Laser(Space_Objects):
 # collision with those objects can change life and score
 class Resources_Obstacles(Space_Objects):
     def __init__(self, x=0, y=0, size=50, img="battleship.png",
-                 sound="explosion.wav", life=0, score=0):
+                 sound="explosion.wav", life=0, score=0, game_screen_width=1000):
         super().__init__(x, y, size, img, sound)
         # how collision affect life and points of a player
         self.life = life

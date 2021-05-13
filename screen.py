@@ -13,7 +13,8 @@ class Color:
 class Screen:
     def __init__(self, width=1000, height=1000, font_type="cambria",
                  font_size=35, background="space.jpg", steering_img_ratio=1,
-                 wheel_img_original='wheel_2.png', arrow_img='arrow_direction.png'):
+                 wheel_img_original='wheel_2.png', arrow_img='arrow_direction.png',
+                 gun_img='space-gun.png'):
         self.width = width
         self.height = height
         self.steering_img_width = int(0.5 * self.height * steering_img_ratio)
@@ -21,6 +22,8 @@ class Screen:
         self.wheel_img_original = pygame.image.load("assets/" + wheel_img_original)
         self.arrow_right_img = pygame.image.load("assets/" + arrow_img)
         self.arrow_left_img = pygame.transform.flip(self.arrow_right_img, True, False)
+        gun_img = pygame.image.load("assets/" + gun_img)
+        self.gun_img = pygame.transform.scale(gun_img, (int(self.height * 0.2),int(self.height * 0.2)))
         self.screen = pygame.display.set_mode((width + self.steering_img_width, height))
         self.font = pygame.font.SysFont(font_type, font_size)
         self.background = pygame.image.load("assets/" + background)
@@ -106,6 +109,12 @@ class Screen:
                                          self.steering_img_height))
 
 
+    def draw_gun(self, steering):
+        if time.time() - steering.shot_pause_time > 0.2:
+            return
+        else:
+            self.screen.blit(self.gun_img, (self.width, int(1.3 * self.steering_img_height)))
+
     def update_screen(self, game, player, img, steering, start_time):
         self.refresh_background()
         self.draw_resources_obstacles(game.resources_obstacles_list)
@@ -120,6 +129,7 @@ class Screen:
         self.draw_steering_img(img)
         self.draw_wheel(steering)
         self.draw_arrow(steering)
+        self.draw_gun(steering)
         self.draw_level_img(game.level, game.level_images)
         self.draw_corner_text(f"Level: {game.level}", self.width + 5, 0,
                               color=Color.RED, font_size=50)

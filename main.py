@@ -12,7 +12,7 @@ from level_images_load import read_level_images
 
 
 def play_game():
-    vid = cv2.VideoCapture(0)
+    vid = cv2.VideoCapture(args.camera)
     vid_h = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
     vid_w = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
     steering_img_ratio = vid_w / vid_h
@@ -26,8 +26,8 @@ def play_game():
     pygame.init()
     screen = Screen(width=game_screen_width, height=game_screen_height,
                     steering_img_ratio=steering_img_ratio)
-    player = Player(x=screen.width / 2, y=screen.height , size=120)
-    game = Game(game_screen_width=game_screen_width)
+    player = Player(x=screen.width / 2, y=screen.height , size=int(120 * game_screen_width/1000))
+    game = Game(game_screen_height=game_screen_height, game_screen_width=game_screen_width)
     game.level_images = read_level_images('star_wars', game.n_levels, screen.height,
                                      steering_img_ratio)
     steering = Steering(steering_screen_height,
@@ -101,5 +101,7 @@ if __name__ == "__main__":
                         help='height of game window')
     parser.add_argument('--width', type=int, default='1000',
                         help='width of game window')
+    parser.add_argument('--camera', type=int, default='0',
+                        help='which camera')
     args = parser.parse_args()
     play_game()

@@ -22,13 +22,15 @@ class Game:
         ]
     
     def __init__(self, sound=False, n_levels=5, initial_speed=10, speed_jump=2,
-                 max_speed=100, pnt_next_lvl=50, game_screen_width=1000):
+                 max_speed=100, pnt_next_lvl=50, game_screen_height=1000,
+                 game_screen_width=1000):
+        self.game_screen_height = game_screen_height
         self.game_screen_width =game_screen_width
         self.sound = sound
-        self.n_levels =n_levels
-        self.initial_speed =initial_speed
-        self.speed_jump =speed_jump
-        self.max_speed = max_speed
+        self.n_levels = n_levels
+        self.initial_speed = initial_speed * self.game_screen_height / 1000
+        self.speed_jump = speed_jump * self.game_screen_height / 1000
+        self.max_speed = max_speed * self.game_screen_height / 1000
         self.pnt_nex_lvl = pnt_next_lvl
         self.life = 100
         self.score = 0
@@ -69,7 +71,7 @@ class Game:
             ro_param = random.choices(self.resources_obstacles, self.probability_of_objects)[0]            
             ro_x = random.randint(0, screen_width)
             ro_y = random.randint(-screen_height, 0)
-            size = int(ro_param["size"] * self.game_screen_width/1000)
+            size = int(ro_param["size"] * self.game_screen_width / 1000)
             new_ro = Resources_Obstacles(x=ro_x, y=ro_y,
                                     img=ro_param["img"],sound=ro_param["sound"],
                                     size=size,life=ro_param["life"],
