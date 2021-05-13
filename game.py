@@ -21,7 +21,7 @@ class Game:
              "score": 0, 'probability': 0.2}
         ]
     
-    def __init__(self, sound=False, n_levels=5, initial_speed=10, speed_jump=2,
+    def __init__(self, sound=False, n_levels=50, initial_speed=10, speed_jump=2,
                  max_speed=100, pnt_next_lvl=50, game_screen_height=1000,
                  game_screen_width=1000):
         self.game_screen_height = game_screen_height
@@ -40,6 +40,7 @@ class Game:
         self.resources_obstacles_list = []
         self.laser_list = []
         self.level_images = None
+        self.FPS = 20
         self.name_player = ""
         self.record_names, self.record_scores = self.read_records()
         sum_of_probabilities = sum(
@@ -55,8 +56,8 @@ class Game:
     def read_records(self):
         with open("assets/records.txt", 'r') as f:
             records = f.readlines()
-        record_names = [line.split()[0] for line in records]
-        record_scores = [int(line.split()[1]) for line in records]
+        record_names = [''.join(line.split()[:-1]) for line in records]
+        record_scores = [int(line.split()[-1]) for line in records]
         return record_names, record_scores
 
     """
@@ -101,12 +102,12 @@ class Game:
             else:
                 self.laser_list.remove(laser)
                             
-    def set_level_speed(self):
-        level = min(int(1 + self.score/self.pnt_nex_lvl), self.n_levels)
+    def set_level_and_speed(self):
+        level = min(int(1 + self.score/self.pnt_nex_lvl), self.n_levels, len(self.level_images))
         if level > self.level and self.sound:
             pygame.mixer.Sound("assets/level.wav").play()
         self.level = level
-        self.speed = min(self.initial_speed + self.level*self.speed_jump, 
+        self.speed = min((self.initial_speed + self.level*self.speed_jump) * 20 / self.FPS,
                          self.max_speed)
         
     def collision_check(self, player):
@@ -176,7 +177,8 @@ class Game:
                     elif event.key == pygame.K_ESCAPE:
                         return 'over'
                     else:
-                        self.name_player += event.unicode.upper()
+                        if len(self.name_player) < 15:
+                            self.name_player += event.unicode.upper()
 
         else:
             for event in pygame.event.get():

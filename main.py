@@ -3,6 +3,7 @@ import time
 import pygame
 import cv2
 import argparse
+from win32api import GetSystemMetrics
 from steering import HandDetector, Steering
 from time import sleep
 from space_objects import Player
@@ -27,8 +28,9 @@ def play_game():
     screen = Screen(width=game_screen_width, height=game_screen_height,
                     steering_img_ratio=steering_img_ratio)
     player = Player(x=screen.width / 2, y=screen.height , size=int(120 * game_screen_width/1000))
-    game = Game(game_screen_height=game_screen_height, game_screen_width=game_screen_width)
-    game.level_images = read_level_images('star_wars', game.n_levels, screen.height,
+    game = Game(game_screen_height=game_screen_height, game_screen_width=game_screen_width,
+                initial_speed=args.initial_speed, speed_jump=args.speed_jump)
+    game.level_images = read_level_images(args.folder_levels, game.n_levels, screen.height,
                                      steering_img_ratio)
     steering = Steering(steering_screen_height,
                                      steering_screen_width)
@@ -74,7 +76,7 @@ def play_game():
 
             game.update_resources_obstacles_positions(screen.height)
             game.update_lasers_positions(pixels)
-            game.set_level_speed()
+            game.set_level_and_speed()
             screen.update_screen(game, player, img, steering, start_time)
             pygame.display.update()
         else:
@@ -94,14 +96,21 @@ def play_game():
             elif game_state == 'new game':
                 vid.release()
                 play_game()
+        game.FPS = 1/(time.time() - start_time)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--height', type=int, default='1000',
+    parser.add_argument('--height', type=int, default=int(round(GetSystemMetrics(1)-150, -2)),
                         help='height of game window')
-    parser.add_argument('--width', type=int, default='1000',
+    parser.add_argument('--width', type=int, default=int(round(GetSystemMetrics(1)-150, -2)),
                         help='width of game window')
-    parser.add_argument('--camera', type=int, default='0',
+    parser.add_argument('--camera', type=int, default=0,
                         help='which camera')
+    parser.add_argument('--folder_levels', type=str, default='star_wars',
+                        help='level images folder')
+    parser.add_argument('--initial_speed', type=int, default=10,
+                        help='initial speed')
+    parser.add_argument('--speed_jump', type=int, default=2,
+                        help='speed jump when next level')
     args = parser.parse_args()
     play_game()
