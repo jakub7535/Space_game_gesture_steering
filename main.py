@@ -27,7 +27,7 @@ def play_game():
     screen = Screen(width=game_screen_width, height=game_screen_height,
                     steering_img_ratio=steering_img_ratio)
     player = Player(x=screen.width / 2, y=screen.height , size=120)
-    game = Game()
+    game = Game(game_screen_width=game_screen_width)
     game.level_images = read_level_images('star_wars', game.n_levels, screen.height,
                                      steering_img_ratio)
     steering = Steering(steering_screen_height,
@@ -86,7 +86,6 @@ def play_game():
                 index_calculated = True
             game_state = game.end_game(screen, game, index, img)
             if game_state == 'over':
-
                 pygame.display.quit()
                 pygame.quit()
                 vid.release()

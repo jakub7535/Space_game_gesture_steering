@@ -22,7 +22,8 @@ class Game:
         ]
     
     def __init__(self, sound=False, n_levels=5, initial_speed=10, speed_jump=2,
-                 max_speed=100, pnt_next_lvl=50):
+                 max_speed=100, pnt_next_lvl=50, game_screen_width=1000):
+        self.game_screen_width =game_screen_width
         self.sound = sound
         self.n_levels =n_levels
         self.initial_speed =initial_speed
@@ -68,9 +69,10 @@ class Game:
             ro_param = random.choices(self.resources_obstacles, self.probability_of_objects)[0]            
             ro_x = random.randint(0, screen_width)
             ro_y = random.randint(-screen_height, 0)
+            size = int(ro_param["size"] * self.game_screen_width/1000)
             new_ro = Resources_Obstacles(x=ro_x, y=ro_y,
                                     img=ro_param["img"],sound=ro_param["sound"],
-                                    size=ro_param["size"],life=ro_param["life"],
+                                    size=size,life=ro_param["life"],
                                     score=ro_param["score"])
             self.resources_obstacles_list.append(new_ro)
 
@@ -136,8 +138,11 @@ class Game:
         screen.draw_centered_text(text=f"YOUR SCORE: {game.score}", x=0.5*screen.width,
                                   y=0.3*screen.height,
                          color=Color.RED, font_type="cambria", font_size=50)
-        screen.draw_centered_text(text=f"Press ESCAPE to start again", x=0.5*screen.width,
+        screen.draw_centered_text(text=f"Press LEFT CTRL to start again", x=0.5*screen.width,
                                   y=0.8*screen.height,
+                         color=Color.GREEN, font_type="cambria", font_size=50)
+        screen.draw_centered_text(text=f"Press ESCAPE to end game", x=0.5*screen.width,
+                                  y=0.9*screen.height,
                          color=Color.GREEN, font_type="cambria", font_size=50)
 
         if index is not None:
@@ -164,8 +169,10 @@ class Game:
                                     file.write(f"{self.record_names[i]} {self.record_scores[i]}\n")
                     elif event.key == pygame.K_BACKSPACE:
                         self.name_player = self.name_player[:-1]
-                    elif event.key == pygame.K_ESCAPE:
+                    elif event.key == pygame.K_LCTRL:
                         return 'new game'
+                    elif event.key == pygame.K_ESCAPE:
+                        return 'over'
                     else:
                         self.name_player += event.unicode.upper()
 
@@ -174,5 +181,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     return 'over'
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+                    if event.key == pygame.K_LCTRL:
                         return 'new game'
+                    elif event.key == pygame.K_ESCAPE:
+                        return 'over'

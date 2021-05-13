@@ -43,12 +43,14 @@ class Screen:
 
     # x, y are coordinates of left, upper corner of text
     def draw_corner_text(self, text, x, y, color=Color.RED, font_type="cambria", font_size=35):
+        font_size = int(font_size * self.width / 1000)
         font = pygame.font.SysFont(font_type, font_size)
         label = font.render(text, 1, color)
         self.screen.blit(label, (x, y))
 
     # x, y are coordinates of center of text
     def draw_centered_text(self, text, x, y, color=Color.RED, font_type="cambria", font_size=35):
+        font_size = int(font_size * self.width / 1000)
         font = pygame.font.SysFont(font_type, font_size)
         label = font.render(text, 1, color)
         label_rect = label.get_rect(center=(x, y))
@@ -109,11 +111,11 @@ class Screen:
         self.draw_resources_obstacles(game.resources_obstacles_list)
         self.draw_laser(game.laser_list)
         self.draw_player(player)
-        self.draw_corner_text(f"Score: {game.score}", self.width-200, self.height-40,
+        self.draw_corner_text(f"Score: {game.score}", 0, int(0.04*self.width),
                               color=Color.RED)
-        self.draw_corner_text(f"Life: {game.life}", self.width - 200, self.height - 80,
+        self.draw_corner_text(f"Life: {game.life}", 0, int(0.08*self.width),
                               color=Color.RED)
-        self.draw_corner_text(f"Amo: {game.ammunition}", self.width - 200, self.height - 120,
+        self.draw_corner_text(f"Amo: {game.ammunition}", 0, int(0.12*self.width),
                               color=Color.RED)
         self.draw_steering_img(img)
         self.draw_wheel(steering)
@@ -121,5 +123,5 @@ class Screen:
         self.draw_level_img(game.level, game.level_images)
         self.draw_corner_text(f"Level: {game.level}", self.width + 5, 0,
                               color=Color.RED, font_size=50)
-        self.draw_corner_text(f"FPS: {round(1/(time.time()- start_time), 2)}", 5, 0,
-                              color=Color.RED, font_size=50)
+        self.draw_corner_text(f"FPS: {round(1/(time.time()- start_time), 2)}", 0, 0,
+                              color=Color.RED, font_size=35)
