@@ -130,12 +130,15 @@ class Game:
         screen.draw_centered_text(text=f"YOUR SCORE: {game.score}", x=0.5*screen.width,
                                   y=0.3*screen.height,
                          color=Color.RED, font_type="cambria", font_size=50)
+        screen.draw_centered_text(text=f"Press ESCAPE to start again", x=0.5*screen.width,
+                                  y=0.8*screen.height,
+                         color=Color.GREEN, font_type="cambria", font_size=50)
 
         if index is not None:
             self.record_names[index] = self.name_player
             self.record_scores[index] = game.score
 
-            screen.draw_centered_text(text=f"ENTER YOUR NAME", x=0.5 * screen.width,
+            screen.draw_centered_text(text=f"TYPE YOUR NAME AND PRESS ENTER", x=0.5 * screen.width,
                                       y=0.4 * screen.height,color=Color.RED, font_type="cambria",
                                       font_size=40)
 
@@ -146,19 +149,23 @@ class Game:
 
             for event in pygame.event.get():
                 if event == pygame.QUIT:
-                    return True
+                    return 'over'
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         with open("assets/" + 'records.txt', 'w') as file:
                             for i in range(len(self.record_scores)):
                                 file.write(f"{self.record_names[i]} {self.record_scores[i]}\n")
-                        return True
                     elif event.key == pygame.K_BACKSPACE:
                         self.name_player = self.name_player[:-1]
+                    elif event.key == pygame.K_ESCAPE:
+                        return 'new game'
                     else:
                         self.name_player += event.unicode.upper()
 
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return True
+                    return 'over'
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return 'new game'

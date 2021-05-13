@@ -82,12 +82,17 @@ def play_game():
                 index = next((i for i, record_score in enumerate(game.record_scores)
                               if game.score > record_score), None)
                 index_calculated = True
-            game_over = game.end_game(screen, game, index, img)
-            if game_over:
+            game_state = game.end_game(screen, game, index, img)
+            if game_state == 'over':
+
                 pygame.display.quit()
                 pygame.quit()
+                vid.release()
                 sys.exit()
                 break
+            elif game_state == 'new game':
+                vid.release()
+                play_game()
 
 if __name__ == "__main__":
     play_game()
