@@ -11,6 +11,8 @@ class Color:
     BLACK = (0, 0, 0)
 
 class Screen:
+    basic_screen_size = 1000
+
     def __init__(self, width=1000, height=1000, font_type="cambria",
                  font_size=35, background="space.jpg", steering_img_ratio=1,
                  wheel_img_original='wheel_2.png', arrow_img='arrow_direction.png',
@@ -23,7 +25,8 @@ class Screen:
         self.arrow_right_img = pygame.image.load("assets/" + arrow_img)
         self.arrow_left_img = pygame.transform.flip(self.arrow_right_img, True, False)
         gun_img = pygame.image.load("assets/" + gun_img)
-        self.gun_img = pygame.transform.scale(gun_img, (int(self.height * 0.2),int(self.height * 0.2)))
+        self.gun_img = pygame.transform.scale(gun_img, (int(self.height * 0.2),
+                                                        int(self.height * 0.2)))
         self.screen = pygame.display.set_mode((width + self.steering_img_width, height))
         self.font = pygame.font.SysFont(font_type, font_size)
         self.background = pygame.image.load("assets/" + background)
@@ -46,14 +49,14 @@ class Screen:
 
     # x, y are coordinates of left, upper corner of text
     def draw_corner_text(self, text, x, y, color=Color.RED, font_type="cambria", font_size=35):
-        font_size = int(font_size * self.width / 1000)
+        font_size = int(font_size * self.width / self.basic_screen_size)
         font = pygame.font.SysFont(font_type, font_size)
         label = font.render(text, 1, color)
         self.screen.blit(label, (x, y))
 
     # x, y are coordinates of center of text
     def draw_centered_text(self, text, x, y, color=Color.RED, font_type="cambria", font_size=35):
-        font_size = int(font_size * self.width / 1000)
+        font_size = int(font_size * self.width / self.basic_screen_size)
         font = pygame.font.SysFont(font_type, font_size)
         label = font.render(text, 1, color)
         label_rect = label.get_rect(center=(x, y))
@@ -78,9 +81,11 @@ class Screen:
 
     def draw_wheel(self, steering):
         if steering.wheel_angle is None:
-            return 0
+            return
         wheel_img = self.wheel_img_original.copy()
         wheel_img = pygame.transform.rotate(wheel_img, steering.wheel_angle)
+        """ When rotating the squared image, new square that contains rotated image may grow.
+          Corners of the square rotated (e.g. 20 degree) spreads more that the flat one."""
         scale = math.cos(math.radians(steering.wheel_angle % 45))/math.cos(math.radians(45))
         radius = int(abs(1 * steering.wheel_radius * scale))
         wheel_img = pygame.transform.scale(wheel_img, (2 * radius, 2 * radius))
@@ -114,6 +119,7 @@ class Screen:
             return
         else:
             self.screen.blit(self.gun_img, (self.width, int(1.3 * self.steering_img_height)))
+
 
     def update_screen(self, game, player, img, steering, start_time):
         self.refresh_background()

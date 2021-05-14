@@ -9,16 +9,16 @@ from google.protobuf.json_format import MessageToDict
 
 
 class HandDetector:
-    def __init__(self, screen_height, screen_width, mode=False, max_hands=2, 
-                 detection_confidence=0.5, tracking_confidence=0.5,
+    def __init__(self, screen_height, screen_width, tracking_mode=False, max_hands=2,
+                 detection_confidence=0.3, tracking_confidence=0.2,
                  draw_hands=True):
-        self.mode = mode
+        self.tracking_mode = tracking_mode
         self.max_hands = max_hands
         self.draw_hands = draw_hands
         self.detection_confidence = detection_confidence
         self.tracking_confidence = tracking_confidence
 
-        self.hands_detection = mp_hands.Hands(self.mode, self.max_hands, 
+        self.hands_detection = mp_hands.Hands(self.tracking_mode, self.max_hands,
                                               self.detection_confidence,
                                               self.tracking_confidence)
 
@@ -47,17 +47,19 @@ class HandDetector:
             left_or_right = hand_info_dict['classification'][0]['label']
             point_list = []
             for id, point in enumerate(hand_info.landmark):
+                print(id, point.x, point.y, point.z)
                 point_x = int(point.x * self.screen_width)
                 point_y = int(point.y * self.screen_height)
-                point_list.append([point_x, point_y])
+                point_z = int(point.z * self.screen_height)
+                point_list.append([point_x, point_y, point_z])
             # calculate hand center
             hand_center = center_points(point_list[0], point_list[9])
 
             fingers_extended = []
 
-            thumb_index_dist = distance_points(point_list[4], point_list[6])
+            thumb_index_dist = distance_points(point_list[4], point_list[10])
             index_middle_dist = distance_points(point_list[6], point_list[10])
-            if thumb_index_dist > 1.8 * index_middle_dist:
+            if thumb_index_dist > 2.5 * index_middle_dist:
                 fingers_extended.append(1)
             else:
                 fingers_extended.append(0)
@@ -65,9 +67,9 @@ class HandDetector:
             for id in range(1, 5):
                 tip_distance = distance_points(point_list[self.tipIds[id]],
                                                point_list[self.tipIds[id]-3])
-                dip_distance = distance_points(point_list[self.tipIds[id]-2],
+                pip_distance = distance_points(point_list[self.tipIds[id]-2],
                                                point_list[self.tipIds[id]-3])
-                if tip_distance > 1.2*dip_distance:
+                if tip_distance > 1.5*pip_distance:
                     fingers_extended.append(1)
                 else:
                     fingers_extended.append(0)
@@ -121,8 +123,8 @@ class Steering:
             # self.wheel_angle = None
             return
 
-        wheel_radius_test = max(int(0.5 * distance_points(left_hand.hand_center,
-                                                          right_hand.hand_center)), 10)
+        wheel_radius_test = max(int(0.5 * distance_points(left_hand.hand_center[:2],
+                                                          right_hand.hand_center[:2])), 10)
         if wheel_radius_test > 0.1*self.screen_width:
             wheel_radius = wheel_radius_test
         else:
@@ -131,7 +133,7 @@ class Steering:
             # self.wheel_angle = None
             return
 
-        wheel_center = center_points(left_hand.hand_center, right_hand.hand_center)
+        wheel_center = center_points(left_hand.hand_center[:2], right_hand.hand_center[:2])
         #cv2.circle(self.img, wheel_center, 10, (255, 0, 255), cv2.FILLED)
         wheel_angle = math.atan2((right_hand.hand_center[1]-left_hand.hand_center[1]),
                                  (right_hand.hand_center[0]-left_hand.hand_center[0]))
@@ -165,15 +167,23 @@ class Steering:
 
 
 
+# def center_points(point_1, point_2):
+#     center_x = int(0.5*(point_1[0] + point_2[0]))
+#     center_y = int(0.5*(point_1[1] + point_2[1]))
+#     return (center_x, center_y)
+#
+# def distance_points(point_1, point_2):
+#     x = abs(point_1[0] - point_2[0])
+#     y = abs(point_1[1] - point_2[1])
+#     distance = (x**2 + y**2)**0.5
+#     return distance
+
 def center_points(point_1, point_2):
-    center_x = int(0.5*(point_1[0] + point_2[0]))
-    center_y = int(0.5*(point_1[1] + point_2[1]))
-    return (center_x, center_y)
+    center = [(int(0.5 * (point_1[i] + point_2[i]))) for i in range(len(point_1))]
+    return center
 
 def distance_points(point_1, point_2):
-    x = abs(point_1[0] - point_2[0])
-    y = abs(point_1[1] - point_2[1])
-    distance = (x**2 + y**2)**0.5
+    distance = int((sum([(point_1[i] - point_2[i])**2 for i in range(len(point_1))])) ** 0.5)
     return distance
 
 def rotate_image(image, angle):

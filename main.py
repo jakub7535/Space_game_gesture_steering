@@ -5,7 +5,6 @@ import cv2
 import argparse
 from win32api import GetSystemMetrics
 from steering import HandDetector, Steering
-from time import sleep
 from space_objects import Player
 from screen import Screen
 from game import Game
@@ -22,35 +21,39 @@ def play_game():
     game_screen_width = args.width
     steering_screen_height = int(game_screen_height * 0.5)
     steering_screen_width = int(steering_screen_height * steering_img_ratio)
-    detector = HandDetector(steering_screen_height, steering_screen_width, draw_hands=False)
+    detector = HandDetector(steering_screen_height, steering_screen_width,
+                            mode=args.tracking_mode,
+                            detection_confidence=args.detection_confidence,
+                            tracking_confidence=args.tracking_confidence,
+                            draw_hands=False)
 
     pygame.init()
     screen = Screen(width=game_screen_width, height=game_screen_height,
                     steering_img_ratio=steering_img_ratio)
-    player = Player(x=screen.width / 2, y=screen.height , size=int(120 * game_screen_width/1000))
+    player = Player(x=screen.width / 2, y=screen.height , size=int(0.1 * game_screen_width))
     game = Game(game_screen_height=game_screen_height, game_screen_width=game_screen_width,
-                initial_speed=args.initial_speed, speed_jump=args.speed_jump)
-    game.level_images = read_level_images(args.folder_levels, game.n_levels, screen.height,
-                                     steering_img_ratio)
-    steering = Steering(steering_screen_height,
-                                     steering_screen_width)
+                initial_speed=args.initial_speed, speed_jump=args.speed_jump, sound=args.sound)
+    game.level_images = read_level_images(args.folder_levels, game.n_levels,
+                                          steering_screen_height, steering_img_ratio)
+    steering = Steering(steering_screen_height, steering_screen_width)
 
     # how many pixel passed
     pixels = 0
+    previous_pixel_count = 1
     index_calculated = False
     while True:
         start_time = time.time()
-        _, img = vid.read()
-        img = cv2.resize(img, (steering_screen_width, steering_screen_height))
-        img = cv2.flip(img, 1)
-        detector.get_hands_params(img)
-
-        turn = None
-        shot = False
+        _, img_full_size = vid.read()
+        img_full_size = cv2.flip(img_full_size, 1)
+        detector.get_hands_params(img_full_size)
+        img = cv2.resize(img_full_size, (steering_screen_width, steering_screen_height))
 
         steering.calculate_wheel(img, detector.left_hand, detector.right_hand)
         if steering.wheel_radius is not None:
             turn, shot = steering.get_commands(detector)
+        else:
+            turn = None
+            shot = False
 
 
         if game.life > 0:
@@ -69,9 +72,17 @@ def play_game():
                 game.create_laser(player.x, player.y, player.size)
 
             # when to create new resources and obstacles
-            if game.speed > pixels % screen.height >= 0:
+            """ We create new space objects 'above' the screen every time,
+             that the previous screen have passed, lets say speed = 4,
+             so previous_pixel_count 2998 % 1000 = 998,
+             but current_pixel_count 3002 % 1000 = 2 , 2 < 998,
+             but the next one will be 3006 % 1000 = 6, 6 > 2,
+             so only once when screen passes we create new objects."""
+            current_pixel_count = pixels % screen.height
+            if current_pixel_count < previous_pixel_count:
                 game.create_resources_obstacles(screen.width, screen.height)
-                game.ammunition = min(game.ammunition + 20, 100)
+                game.ammunition = min(game.ammunition + 2, 10)
+            previous_pixel_count = current_pixel_count
             pixels += game.speed
 
             game.update_resources_obstacles_positions(screen.height)
@@ -100,17 +111,25 @@ def play_game():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--height', type=int, default=int(round(GetSystemMetrics(1)-150, -2)),
+    parser.add_argument('--height', type=int, default=int(GetSystemMetrics(1)-100),
                         help='height of game window')
-    parser.add_argument('--width', type=int, default=int(round(GetSystemMetrics(1)-150, -2)),
+    parser.add_argument('--width', type=int, default=int(GetSystemMetrics(1)-100),
                         help='width of game window')
     parser.add_argument('--camera', type=int, default=0,
                         help='which camera')
     parser.add_argument('--folder_levels', type=str, default='star_wars',
                         help='level images folder')
-    parser.add_argument('--initial_speed', type=int, default=10,
+    parser.add_argument('--initial_speed', type=float, default=8,
                         help='initial speed')
-    parser.add_argument('--speed_jump', type=int, default=2,
+    parser.add_argument('--speed_jump', type=float, default=1.5,
                         help='speed jump when next level')
+    parser.add_argument('--sound', type=bool, default=False,
+                        help='sounds of the game')
+    parser.add_argument('--detection_confidence', type=float, default=0.4,
+                        help='detection confidence')
+    parser.add_argument('--tracking_confidence', type=float, default=0.3,
+                        help='tracking confidence')
+    parser.add_argument('--tracking_mode', type=bool, default=True,
+                        help='use detection from previous frame, slower but better')
     args = parser.parse_args()
     play_game()

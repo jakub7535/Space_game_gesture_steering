@@ -4,18 +4,20 @@ from screen import Color
 from space_objects import Resources_Obstacles, Laser
 
 class Game:
+    basic_screen_size = 1000
+    basic_FPS = 20
     resources_obstacles =[ 
-            {"img":"comet.png", "sound":"explosion.wav", "size":120, "life":-20,
+            {"img":"comet.png", "sound":"explosion.wav", "size":100, "life":-20,
              "score":0, 'probability': 0.5},
-            {"img":"empire_ship.png", "sound":"explosion.wav", "size":100, "life":-15,
+            {"img":"empire_ship.png", "sound":"explosion.wav", "size":80, "life":-15,
              "score":0, 'probability': 0.3},
-            {"img": "ufo.png", "sound": "explosion.wav", "size": 100,
+            {"img": "ufo.png", "sound": "explosion.wav", "size": 80,
              "life": -25,  "score": 0, 'probability': 0.2},
-            {"img":"diamond.png", "sound":"point.wav", "size":80, "life":0,
+            {"img":"diamond.png", "sound":"point.wav", "size":60, "life":0,
              "score":20, 'probability': 0.4},
-            {"img": "red_diamond.png", "sound": "point.wav", "size": 60, "life": 0,
+            {"img": "red_diamond.png", "sound": "point.wav", "size": 50, "life": 0,
              "score": 30, 'probability': 0.2},
-            {"img": "gold_diamond.png", "sound": "point.wav", "size": 60, "life": 0,
+            {"img": "gold_diamond.png", "sound": "point.wav", "size": 50, "life": 0,
              "score": 50, 'probability': 0.05},
             {"img": "tools.png", "sound": "tools.wav", "size": 60, "life": 10,
              "score": 0, 'probability': 0.2}
@@ -28,15 +30,15 @@ class Game:
         self.game_screen_width =game_screen_width
         self.sound = sound
         self.n_levels = n_levels
-        self.initial_speed = initial_speed * self.game_screen_height / 1000
-        self.speed_jump = speed_jump * self.game_screen_height / 1000
-        self.max_speed = max_speed * self.game_screen_height / 1000
+        self.initial_speed = initial_speed * self.game_screen_height / self.basic_screen_size
+        self.speed_jump = speed_jump * self.game_screen_height / self.basic_screen_size
+        self.max_speed = max_speed * self.game_screen_height / self.basic_screen_size
         self.pnt_nex_lvl = pnt_next_lvl
         self.life = 100
         self.score = 0
         self.speed = self.initial_speed
         self.level = 1
-        self.ammunition = 100
+        self.ammunition = 10
         self.resources_obstacles_list = []
         self.laser_list = []
         self.level_images = None
@@ -72,7 +74,7 @@ class Game:
             ro_param = random.choices(self.resources_obstacles, self.probability_of_objects)[0]            
             ro_x = random.randint(0, screen_width)
             ro_y = random.randint(-screen_height, 0)
-            size = int(ro_param["size"] * self.game_screen_width / 1000)
+            size = int(ro_param["size"] * self.game_screen_width / self.basic_screen_size)
             new_ro = Resources_Obstacles(x=ro_x, y=ro_y,
                                     img=ro_param["img"],sound=ro_param["sound"],
                                     size=size,life=ro_param["life"],
@@ -80,10 +82,10 @@ class Game:
             self.resources_obstacles_list.append(new_ro)
 
     def create_laser(self, player_x, player_y, player_size):
-        if self.ammunition >= 20:
+        if self.ammunition >= 1:
             laser = Laser(player_x, player_y, player_size)
             self.laser_list.append(laser)
-            self.ammunition -= 20
+            self.ammunition -= 1
             if laser.sound is not None and self.sound:
                 laser.sound.play()
 
@@ -107,9 +109,9 @@ class Game:
         if level > self.level and self.sound:
             pygame.mixer.Sound("assets/level.wav").play()
         self.level = level
-        self.speed = min((self.initial_speed + self.level*self.speed_jump) * 20 / self.FPS,
+        self.speed = min((self.initial_speed + self.level * self.speed_jump) * self.basic_FPS / self.FPS,
                          self.max_speed)
-        
+
     def collision_check(self, player):
         for ro in self.resources_obstacles_list:
             if ro.detect_collision(player):
