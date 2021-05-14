@@ -5,7 +5,7 @@ Our goal is to collect as many points as we can, you collect them by catching ge
 To steer the spaceship you need to pretend that you are holding a wheel, like you would do while driving a car. 
 The stronger you turn, the faster the spaceship will turn. You shoot laser by giving the thumbs up with both of your hands, while the rest of the fingers are folded.
 ## Tips for better steering:
-1. Make sure your palms are visible for the camera.
+1. Make sure your hands are visible for the camera.
 2. Make sure you have a good lighting and the camera sees you clearly.
 3. Try to avoid rapid movements of hands, so they wouldn't look blurry for the camera.
 4. Try to remember to keep your hands in fist positions (fingers folded).
