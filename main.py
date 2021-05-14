@@ -22,7 +22,7 @@ def play_game():
     steering_screen_height = int(game_screen_height * 0.5)
     steering_screen_width = int(steering_screen_height * steering_img_ratio)
     detector = HandDetector(steering_screen_height, steering_screen_width,
-                            mode=args.tracking_mode,
+                            tracking_mode=args.tracking_mode,
                             detection_confidence=args.detection_confidence,
                             tracking_confidence=args.tracking_confidence,
                             draw_hands=False)
