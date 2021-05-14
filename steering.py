@@ -47,7 +47,6 @@ class HandDetector:
             left_or_right = hand_info_dict['classification'][0]['label']
             point_list = []
             for id, point in enumerate(hand_info.landmark):
-                print(id, point.x, point.y, point.z)
                 point_x = int(point.x * self.screen_width)
                 point_y = int(point.y * self.screen_height)
                 point_z = int(point.z * self.screen_height)
