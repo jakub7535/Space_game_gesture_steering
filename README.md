@@ -42,7 +42,7 @@ Installing using pip
 ``` bash
 pip install opencv-python==4.5.1.48 numpy==1.19.2 pygame==2.0.1 mediapipe==0.8.3.1 msvc-runtime
 ```
-If pip can't find right version of libraries upgrade pip and pip install again
+If pip can't find right version of libraries, upgrade pip and pip install again
 
 ``` bash
 pip install --upgrade pip
