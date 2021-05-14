@@ -17,6 +17,7 @@ If you'll be a good enough pilot you can cover yourself with glory and earn plac
 
 
 # Instalation
+Only requirement to be able to install a game is camera and python>=3.6 installed.
 First clone this repository using git 
 
 ``` bash
