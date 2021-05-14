@@ -9,7 +9,7 @@ from google.protobuf.json_format import MessageToDict
 
 
 class HandDetector:
-    def __init__(self, screen_height, screen_width, tracking_mode=False, max_hands=2,
+    def __init__(self, screen_height, screen_width, tracking_mode, max_hands=2,
                  detection_confidence=0.3, tracking_confidence=0.2,
                  draw_hands=True):
         self.tracking_mode = tracking_mode

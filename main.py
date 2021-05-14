@@ -40,7 +40,6 @@ def play_game():
     # how many pixel passed
     pixels = 0
     previous_pixel_count = 1
-    index_calculated = False
     while True:
         start_time = time.time()
         _, img_full_size = vid.read()
@@ -92,12 +91,8 @@ def play_game():
             pygame.display.update()
         else:
             pygame.display.update()
-            # Where player would be in top scores
-            if not index_calculated:
-                index = next((i for i, record_score in enumerate(game.record_scores)
-                              if game.score > record_score), None)
-                index_calculated = True
-            game_state = game.end_game(screen, game, index, img)
+
+            game_state = game.end_game(screen, game, img)
             if game_state == 'over':
                 pygame.display.quit()
                 pygame.quit()
@@ -107,6 +102,7 @@ def play_game():
             elif game_state == 'new game':
                 vid.release()
                 play_game()
+        print(1/(time.time() - start_time))
         game.FPS = 1/(time.time() - start_time)
 
 if __name__ == "__main__":
@@ -129,7 +125,7 @@ if __name__ == "__main__":
                         help='detection confidence')
     parser.add_argument('--tracking_confidence', type=float, default=0.3,
                         help='tracking confidence')
-    parser.add_argument('--tracking_mode', type=bool, default=True,
+    parser.add_argument('--tracking_mode', type=bool, default=False,
                         help='use detection from previous frame, slower but better')
     args = parser.parse_args()
     play_game()

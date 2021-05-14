@@ -45,6 +45,7 @@ class Game:
         self.FPS = 20
         self.name_player = ""
         self.record_names, self.record_scores = self.read_records()
+        self.player_index_records = None
         sum_of_probabilities = sum(
             [object['probability'] for object in self.resources_obstacles])
         self.probability_of_objects = [
@@ -130,9 +131,19 @@ class Game:
                     if ro.sound is not None and self.sound:
                         ro.sound.play()
                     break
-    
+
+    def find_player_index_records(self):
+        index = 'Not in records'
+        for i in reversed(range(len(self.record_scores))):
+            if self.score > self.record_scores[i]:
+                index = i
+        print(index)
+        self.player_index_records = index
+
     # function that is run after player have lost
-    def end_game(self, screen, game, index, img):
+    def end_game(self, screen, game, img):
+        if self.player_index_records is None:
+            game.find_player_index_records()
         screen.refresh_background()
         screen.draw_level_img(game.level, game.level_images)
         screen.draw_steering_img(img)
@@ -150,9 +161,10 @@ class Game:
                                   y=0.9*screen.height,
                          color=Color.GREEN, font_type="cambria", font_size=50)
 
-        if index is not None:
-            self.record_names[index] = self.name_player
-            self.record_scores[index] = game.score
+
+        if self.player_index_records!='Not in records':
+            self.record_names[self.player_index_records] = self.name_player
+            self.record_scores[self.player_index_records] = game.score
 
             screen.draw_centered_text(text=f"TYPE YOUR NAME AND PRESS ENTER", x=0.5 * screen.width,
                                       y=0.4 * screen.height,color=Color.RED, font_type="cambria",
