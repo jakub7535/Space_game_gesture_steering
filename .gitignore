@@ -5,6 +5,7 @@ README.md
 __pycache__/
 .idea/
 assets/assets_trash
+assets/records.txt
 *.png
 !assets/**/*.png
 *.jpg
