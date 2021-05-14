@@ -30,17 +30,16 @@ Then enter the repository:
 
 ![image](https://user-images.githubusercontent.com/73268650/118058724-248f5300-b38f-11eb-91aa-c8569f5037d3.png)
 
-Installing using conda(recomended) and virtual environment
+(**OPTIONAL**) Creating virtual environment. If you don't have conda skip this part.
 
 ``` bash
 conda create --name Space_game python=3.8.5
 conda activate Space_game
-pip install opencv-python==4.5.1.48 numpy==1.19.2 pygame==2.0.1 mediapipe==0.8.3.1 msvc-runtime
 ```
 Installing using pip
 
 ``` bash
-pip install opencv-python==4.5.1.48 numpy==1.19.2 pygame==2.0.1 mediapipe==0.8.3.1 msvc-runtime
+pip install -r requirements.txt
 ```
 If pip can't find right version of libraries, upgrade pip and pip install again
 
