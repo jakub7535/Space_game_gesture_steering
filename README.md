@@ -5,7 +5,7 @@ Our goal is to collect as many points as we can, you collect them by catching ge
 To steer the spaceship you need to pretend that you are holding a wheel, like you would do while driving a car. 
 The stronger you turn, the faster the spaceship will turn. You shoot laser by giving the thumbs up with both of your hands, while the rest of the fingers are folded.
 ## Tips for better steering:
-1. Make sure your palms are visible for the camera.
+1. Make sure your hands are visible for the camera.
 2. Make sure you have a good lighting and the camera sees you clearly.
 3. Try to avoid rapid movements of hands, so they wouldn't look blurry for the camera.
 4. Try to remember to keep your hands in fist positions (fingers folded).
@@ -42,7 +42,21 @@ Installing using pip
 ``` bash
 pip install opencv-python==4.5.1.48 numpy==1.19.2 pygame==2.0.1 mediapipe==0.8.3.1 msvc-runtime
 ```
+If pip can't find right version of libraries, upgrade pip and pip install again
+
+``` bash
+pip install --upgrade pip
+```
 To play type into command window(make sure you are in the right repository):
 ``` bash
 python main.py
 ```
+You can change some parameters of the game through command line arguments or simply change them in the code
+``` bash
+python main.py --width 1000 --height 1000 --camera 0 --initial_speed 10 --speed_jump 2 --folder_levels star_wars
+```
+You can add folder with images to 'assets/levels/'.
+Just make sure you order them correctly (1.png, 2.jpg, 3.png, ...)
+![image](https://user-images.githubusercontent.com/73268650/118181763-7213ca80-b438-11eb-9aa5-5a0a2206dffa.png)
+
+
