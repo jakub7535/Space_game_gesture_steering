@@ -126,6 +126,6 @@ if __name__ == "__main__":
     parser.add_argument('--tracking_confidence', type=float, default=0.3,
                         help='tracking confidence')
     parser.add_argument('--tracking_mode', type=bool, default=False,
-                        help='use detection from previous frame, slower but better')
+                        help='use detections from previous frame, faster but worse steering')
     args = parser.parse_args()
     play_game()

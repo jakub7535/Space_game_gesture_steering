@@ -76,7 +76,7 @@ class HandDetector:
             if self.draw_hands:
                 mp_draw.draw_landmarks(img, hand_info,
                                            mp_hands.HAND_CONNECTIONS)
-                cv2.circle(self.img, hand_center, 10, (255, 0, 255), cv2.FILLED)
+                cv2.circle(self.img, hand_center[:2], 10, (255, 0, 255), cv2.FILLED)
 
             hand = SingleHandParameters(index, prediction_confidence, left_or_right,
                                         point_list, hand_center, fingers_extended)
