@@ -10,3 +10,4 @@ assets/assets_trash
 *.jpg
 !assets/**/*.jpg
 main_steering.py
+assets/records.txt
