@@ -139,5 +139,5 @@ class Screen:
         self.draw_level_img(game.level, game.level_images)
         self.draw_corner_text(f"Level: {game.level}", self.width + 5, 0,
                               color=Color.RED, font_size=50)
-        self.draw_corner_text(f"FPS: {round(1/(time.time()- start_time), 2)}", 0, 0,
+        self.draw_corner_text(f"FPS: {round(1/(time.time()- start_time))}", 0, 0,
                               color=Color.RED, font_size=35)

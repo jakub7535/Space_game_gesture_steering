@@ -44,18 +44,18 @@ def play_game():
         start_time = time.time()
         _, img_full_size = vid.read()
         img_full_size = cv2.flip(img_full_size, 1)
-        detector.get_hands_params(img_full_size)
         img = cv2.resize(img_full_size, (steering_screen_width, steering_screen_height))
 
-        steering.calculate_wheel(img, detector.left_hand, detector.right_hand)
-        if steering.wheel_radius is not None:
-            turn, shot = steering.get_commands(detector)
-        else:
-            turn = None
-            shot = False
-
-
         if game.life > 0:
+            detector.get_hands_params(img_full_size)
+            steering.calculate_wheel(img, detector.left_hand,
+                                     detector.right_hand)
+            if steering.wheel_radius is not None:
+                turn, shot = steering.get_commands(detector)
+            else:
+                turn = None
+                shot = False
+
             game.collision_check(player)
             game.laser_hit_check()
             for event in pygame.event.get():
@@ -102,7 +102,6 @@ def play_game():
             elif game_state == 'new game':
                 vid.release()
                 play_game()
-        print(1/(time.time() - start_time))
         game.FPS = 1/(time.time() - start_time)
 
 if __name__ == "__main__":

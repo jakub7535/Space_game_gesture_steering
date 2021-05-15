@@ -30,9 +30,9 @@ class Laser(Space_Objects):
     player_basic_size = 120
     def __init__(self, player_x=0, player_y=0, player_size=0, size=60,
                  img="laser_2.png", sound="laser_2.wav"):
-        self.x = player_x + int(0.5*(player_size - size))
-        self.y = player_y - int(size)
         self.size = int(size * player_size/self.player_basic_size)
+        self.x = player_x + int(0.5*(player_size - self.size))
+        self.y = player_y - int(self.size)
         self.img = pygame.image.load("assets/" + img)
         self.img = pygame.transform.scale(self.img, (self.size, self.size))
         if sound is not None:
