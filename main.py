@@ -62,7 +62,19 @@ def play_game():
                 if event.type == pygame.QUIT:
                     pygame.display.quit()
                     pygame.quit()
+                    vid.release()
                     sys.exit()
+                    break
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LCTRL:
+                        vid.release()
+                        play_game()
+                    elif event.key == pygame.K_ESCAPE:
+                        pygame.display.quit()
+                        pygame.quit()
+                        vid.release()
+                        sys.exit()
+                        break
 
             if turn is not None:
                 player.x = min(max(player.x - 0.002 * steering.wheel_angle * player.size, 0),
@@ -118,7 +130,7 @@ if __name__ == "__main__":
                         help='initial speed')
     parser.add_argument('--speed_jump', type=float, default=1.5,
                         help='speed jump when next level')
-    parser.add_argument('--sound', type=bool, default=False,
+    parser.add_argument('--sound', type=bool, default=True,
                         help='sounds of the game')
     parser.add_argument('--detection_confidence', type=float, default=0.4,
                         help='detection confidence')

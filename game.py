@@ -23,7 +23,7 @@ class Game:
              "score": 0, 'probability': 0.2}
         ]
     
-    def __init__(self, sound=False, n_levels=50, initial_speed=10, speed_jump=2,
+    def __init__(self, sound=False, n_levels=100, initial_speed=10, speed_jump=2,
                  max_speed=100, pnt_next_lvl=50, game_screen_height=1000,
                  game_screen_width=1000):
         self.game_screen_height = game_screen_height

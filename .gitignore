@@ -8,5 +8,4 @@ assets/assets_trash
 !assets/**/*.png
 *.jpg
 !assets/**/*.jpg
-main_steering.py
 assets/records.txt
